@@ -30,6 +30,7 @@ pipeline
             string( name: 'DOCKER_TAG',
                     defaultValue: "tagname", 
                     description: 'Docker Image Tag')
+		
     }
 	
     stages 
@@ -107,7 +108,8 @@ pipeline
             {
                 echo '_________________________ DOCKER IMAGE RUN ________________________________'
                 bat 'docker pull %DOCKER_REPOSITORY%:%DOCKER_TAG%'   
-                bat 'docker run --rm -p 6123:5001 %DOCKER_REPOSITORY%:%DOCKER_TAG% '   
+		echo "listning on port 5383"
+                bat 'docker run --rm -p 5383:80 %DOCKER_REPOSITORY%:%DOCKER_TAG% '   
             }
         }
     }
