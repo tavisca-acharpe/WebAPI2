@@ -107,7 +107,7 @@ pipeline
             {
                 echo '_________________________ DOCKER IMAGE RUN ________________________________'
                 bat 'docker pull %DOCKER_REPOSITORY%:%DOCKER_TAG%'   
-                bat 'docker run --rm -p 6069:5000 %DOCKER_REPOSITORY%:%DOCKER_TAG% '   
+                bat 'docker run --rm -p 6123:5001 %DOCKER_REPOSITORY%:%DOCKER_TAG% '   
             }
         }
     }
