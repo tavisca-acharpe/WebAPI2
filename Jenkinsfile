@@ -20,7 +20,7 @@ pipeline
                     description: 'Docker Account Password')
 
             string( name: 'DOCKER_IMAGE',
-                    defaultValue: "webapi_image", 
+                    defaultValue: "webapiimage", 
                     description: 'Docker Image Name')
 
             string( name: 'DOCKER_REPOSITORY',
