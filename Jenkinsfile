@@ -39,82 +39,48 @@ pipeline
 	
     stages 
     {
-    	stage('Restore') 
+    	stage('Build') 
         {
             steps 
             {
                 echo '_________________________ RESTORE ________________________________'
-				bat 'dotnet restore %SOLUTION_FILE% --source https://api.nuget.org/v3/index.json'            
-            }
-        }
-        stage('Build') 
-        {
-            steps 
-            {
-                echo '_________________________ BUILD ________________________________'
+		bat 'dotnet restore %SOLUTION_FILE% --source https://api.nuget.org/v3/index.json'    
+
+		echo '_________________________ BUILD ________________________________'
                 bat 'dotnet build %SOLUTION_FILE% -p:Configuration=release -v:q'
-            }
-        }
-        stage('Test') 
-        {
-            steps 
-            {
-                echo '_________________________ TEST ________________________________'
+		    
+		echo '_________________________ TEST ________________________________'
                 bat 'dotnet test %TEST_FILE%'
+		    
+		echo '_________________________ PUBLISH ________________________________'
+                bat 'dotnet publish %SOLUTION_FILE% -c RELEASE -o Publish'    
             }
         }
-        stage('PUBLISH')
-        {
-            steps 
-            {
-                echo '_________________________ PUBLISH ________________________________'
-                bat 'dotnet publish %SOLUTION_FILE% -c RELEASE -o Publish'
-            }
-        }
-        stage('BUILD DOCKER IMAGE')
+        stage('Deploy') 
         {
             steps 
             {
                 echo '_________________________ BUILD DOCKER IMAGE ________________________________'
-                bat 'docker build -t %DOCKER_IMAGE% -f Dockerfile .'               
-            }
-        }
-        stage('DOCKER USER LOGIN')
-        {
-            steps 
-            {
-                echo '_________________________ DOCKER USER LOGIN ________________________________'
+                bat 'docker build -t %DOCKER_IMAGE% -f Dockerfile .' 
+		
+		echo '_________________________ DOCKER USER LOGIN ________________________________'
                 bat 'docker login -p %DOCKER_PASSWORD% -u %DOCKER_USERNAME%'
-            }
-        }
-        stage('DOCKER PUSH IMAGE TO DOCKERHUB')
-        {
-            steps 
-            {
-                echo '__________________ DOCKER PUSH IMAGE TO DOCKERHUB ________________________'
+		    
+		echo '__________________ DOCKER PUSH IMAGE TO DOCKERHUB ________________________'
                 bat 'docker tag %DOCKER_IMAGE% %DOCKER_REPOSITORY%:%DOCKER_TAG%'
                 bat 'docker push %DOCKER_REPOSITORY%:%DOCKER_TAG%'
-            }
-        }
-
-        stage('REMOVE OLD IMAGE')
-        {
-            steps 
-            {
-                echo '_________________________ REMOVE OLD IMAGE ________________________________'
+		    
+		echo '_________________________ REMOVE OLD IMAGE ________________________________'
                 bat 'docker rmi %DOCKER_IMAGE%:latest'
                 bat 'docker rmi %DOCKER_REPOSITORY%:%DOCKER_TAG%'
-            }
-        }
-        stage('DOCKER IMAGE RUN')
-        {
-            steps 
-            {
-                echo '_________________________ DOCKER IMAGE RUN ________________________________'
+		    
+		echo '_________________________ DOCKER IMAGE RUN ________________________________'
                 bat 'docker pull %DOCKER_REPOSITORY%:%DOCKER_TAG%'   
 		echo "listning on port 5383"
-                bat 'docker run --rm -p %PORT_NO%:80 %DOCKER_REPOSITORY%:%DOCKER_TAG% '   
+                bat 'docker run --rm -p %PORT_NO%:80 %DOCKER_REPOSITORY%:%DOCKER_TAG% '    
+		    
             }
         }
+       
     }
 }
