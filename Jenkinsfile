@@ -43,7 +43,7 @@ pipeline
         {
             steps 
             {
-		bat ''' dotnet C:\Sonarscanner\SonarScanner.MSBuild.dll begin /k:"WebApi" /d:sonar.host.url="http://localhost:9000" /d:sonar.login="ec68762711e9188f5d09da87edd02ae799f6f8a7" '''   
+		bat ''' dotnet C:/Sonarscanner/SonarScanner.MSBuild.dll begin /k:"WebApi" /d:sonar.host.url="http://localhost:9000" /d:sonar.login="ec68762711e9188f5d09da87edd02ae799f6f8a7" '''   
 		    
                 echo '_________________________ RESTORE ________________________________'
 		bat 'dotnet restore %SOLUTION_FILE% --source https://api.nuget.org/v3/index.json'    
@@ -54,7 +54,7 @@ pipeline
 		echo '_________________________ TEST ________________________________'
                 bat 'dotnet test %TEST_FILE%'
 		    
-		bat 'dotnet C:\Sonarscanner\SonarScanner.MSBuild.dll end /d:sonar.login="ec68762711e9188f5d09da87edd02ae799f6f8a7" '    
+		bat 'dotnet C:/Sonarscanner/SonarScanner.MSBuild.dll end /d:sonar.login="ec68762711e9188f5d09da87edd02ae799f6f8a7" '    
 		    
 		echo '_________________________ PUBLISH ________________________________'
                 bat 'dotnet publish %SOLUTION_FILE% -c RELEASE -o Publish'    
