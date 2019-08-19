@@ -48,7 +48,7 @@ pipeline
             steps 
             {
                 echo '_________________________ BUILD ________________________________'
-                bat 'dotnet build %SOLUTION_FILE% -p:Configuration=release -v:n'
+                bat 'dotnet build %SOLUTION_FILE% -p:Configuration=release -v:q'
             }
         }
         stage('Test') 
